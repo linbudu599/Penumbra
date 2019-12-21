@@ -1,0 +1,33 @@
+{
+  "name": "Penumbra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-CE": "nodemon --exec babel-node  ./CJS-vs-ESM/esm-main.js",
+    "start-OC": "nodemon --exec babel-node  ./ES-Next/Optional-Chaining/index.js",
+    "start-NC": "nodemon --exec babel-node  ./ES-Next/Nullish-Coalescing/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linbudu599/Penumbra.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linbudu599/Penumbra/issues"
+  },
+  "homepage": "https://github.com/linbudu599/Penumbra#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/node": "^7.7.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/polyfill": "^7.7.0",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/register": "^7.7.7",
+    "nodemon": "^2.0.2"
+  }
+}
