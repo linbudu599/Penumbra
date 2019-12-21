@@ -1,6 +1,6 @@
 # Optional chaining
 
-> [Optional chaining（以下简称 OC）](https://github.com/tc39/proposal-optional-chaining) 已经进入 **stage 4: finished ** 阶段，目前 ts3.7+已经可以直接使用，js 需要安装 Babel 插件 `@babel/plugin-proposal-optional-chaining` ，另外，关于升级到 Babel7 的配置，可以查看这里： [Tips-Babel7](../../Tips/babel7-config.md)
+> [Optional chaining（以下简称 OC）](https://github.com/tc39/proposal-optional-chaining) 已经进入 **stage 4: finished** 阶段，目前 ts3.7+已经可以直接使用，js 需要安装 Babel 插件 `@babel/plugin-proposal-optional-chaining` ，另外，关于升级到 Babel7 的配置，可以查看这里： [Tips-Babel7](../../Tips/babel7-config.md)
 
 ## 使用方式
 
@@ -42,7 +42,7 @@ a == null ? undefined : a.b.c(++x).d;
 
 JS 对 Optional chaining 的理解不同导致的。Optional chaining 仅仅是安全访问保护，不代表 `try catch`，也就是它不会捕获异常：
 
-```
+```javscript
 a?.b()
 ```
 
@@ -52,7 +52,7 @@ a?.b()
 
 > [Nullish-Coalescing](https://github.com/tc39/proposal-nullish-coalescing) 目前处于 **stage 3: candidate** 阶段
 
-### 语义
+### NC 语义
 
 如果 `variable` 是 `undefined` 或 `null`, 则表达式 `variable ?? defaultValue`的结果为`defaultValue` , 否则表达式的值为 `variable` 的值。
 不同于 `||` 符号，如果其左边是 false 或 0，则不会使默认值生效。
