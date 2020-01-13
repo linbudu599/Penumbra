@@ -168,6 +168,7 @@ export default function Index() {
 
 ## 验证码
 
+> 2020-1-11 更新: 用自定义hooks的方式来实现 [useCountDown](https://github.com/linbudu599/Effective-Customize-Hooks/blob/master/hooks/useCountDown/useCountDown.js)
 > 验证码的逻辑和前面几个并不太一样，这里我就暂时先放上自己摸索的写法 [send-verify-code.js](send-verify-code.js)
 
 能够正常工作：
