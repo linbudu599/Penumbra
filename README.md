@@ -6,6 +6,7 @@
 - JavaScript 基础
 
   - [Closure In JavaScript](./JS/Closure/Closure.md)
+  - [You don't know JS(ON.stringify())](./JS/JSON/stringify/README.md)
 
 - ES-Next
 
