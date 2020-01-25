@@ -6,7 +6,7 @@
 - JavaScript 基础
 
   - [Closure In JavaScript](./JS/Closure/Closure.md)
-  - [You don't know JS(ON.stringify())](./JS/JSON/stringify/about.md)
+  - [You don't know JSON.stringify()](./JS/JSON/stringify/about.md)
 
 - ES-Next
 
@@ -19,3 +19,9 @@
   > 开始写 React 之后越来越觉得它好玩了，但要玩好可也不容易~
 
   - [React Hooks 与 setInterval 的一些思考](React/Hooks-setInterval/Hooks-setInterval.md)
+
+- 其他
+
+  > 前端工程化/产品思维/用户体验等
+
+  - [埋点：为了更好的用户体验而奋斗](FE/Track/main.md)
