@@ -13,11 +13,13 @@
 **webpack**用的好，代码烦恼多不了~ 以下会尽可能详细的列举出在配置过程中每一处可能影响打包时间的地方。
 
 - 优化构建速度
-  - 配置 `resolve` 字段，来减少webpack搜索待打包文件的时间。包括 `mainFields` `extension` 等，类似的还有 `exclude` / `include` 等
+  - 配置 `resolve` 字段，来减少webpack搜索待打包文件的时间。包括 `alias` `mainFields` `extension` `exclude`  `include` `noParse`(对于一些我们认为其不会再依赖别的包的包) 
   - 多进程压缩，如使用 `ParallelUglifyPlugin` 来多进程压缩JS文件（可以在子进程调用`UglifyJS`~）
   - `externals`字段，排除掉会在页面内独立引入的代码
+    - loader缓存，如在 `babel-loader` 中，通过设置 `cacheDirectory` 来将每次的编译结果写入硬盘，再次构建前会比较是否有变化。
 - 优化资源大小
-  - 压缩各类文件时对应的插件配置，去除无用的代码/注释等，如 `purify-CSS-plugin` 与 `tree-shaking`（注意，摇树优化需要在 `.babelrc` 文件中关闭转化为`commonJS`规范(`module: false`)）
+  - 压缩各类文件时对应的插件配置，去除无用的代码/注释等，如 `purify-CSS-plugin` 
+  -  `tree-shaking`（注意，摇树优化需要在 `.babelrc` 文件中关闭转化为`commonJS`规范(`module: false`)），设置为生产模式时会自动开启，但要使其生效必须生成的是ES6模块，而Babel的预设环境中默认会转译成 `commonJs` 类型
   - 压缩图片及将小于某个大小的图片Base64转码
   - 代码分割（code spliting）按需加载，例如将不同功能的代码合并成不同的chunk，在首屏入口只加载少量代码。按需加载如 `Lodash` 这种工具类库还是很有必要的，可以看[这篇文章](https://imys.net/20161217/webpack-use-lodash.html)
   - 突然想到如果首屏是鉴权页，可以分离出来单独做一个SPA

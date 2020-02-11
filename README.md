@@ -13,12 +13,14 @@
   > 处于 ES 提案 stage3/4，很好用的新特性
 
   - [Optional-Chaining](./ES-Next/Optional-Chaining/main.md)
+  - [Dynamic Import](./ES-Next/Dynamic-Import/README.md)
 
 - React
 
   > 开始写 React 之后越来越觉得它好玩了，但要玩好可也不容易~
 
-  - [React Hooks 与 setInterval 的一些思考](React/Hooks-setInterval/Hooks-setInterval.md)
+  - [React Hooks 与 setInterval 的一些思考](./React/Hooks-setInterval/Hooks-setInterval.md)
+  - [Redux源码解读](./React/redux/README.md) 
 
 - 其他
 
