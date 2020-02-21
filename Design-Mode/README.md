@@ -289,3 +289,281 @@ call是包装了apply的一个语法糖，如果明确知道入参数量，就�
 Math.max.apply( null, [ 1, 2, 5, 3, 4 ] ) // 输出：5
 ```
 
+this大致整理完了，见面经仓库
+
+
+
+### 闭包与高阶函数
+
+> 2-16 63/317
+
+果然基础过了一些读起来快多了
+
+```js
+for ( var i = 0, len = nodes.length; i < len; i++ ){ 
+ (function( i ){ 
+ nodes[ i ].onclick = function(){ 
+ console.log(i); 
+ } 
+ })( i ) 
+};
+```
+
+解决原理：
+
+原本当onClick绑定的匿名函数顺着作用域链从内到外查找变量i时，for循环已经结束，此时找到是5，使用闭包，变量i被封闭在一个单独的作用域里，顺着作用域链查找时会先找到被封闭起来的i
+
+
+
+```js
+var mult = (function(){ 
+ var cache = {}; 
+  clg("outer")
+ return function(){ 
+  clg("inner")
+ var args = Array.prototype.join.call( arguments, ',' ); 
+ if ( args in cache ){ 
+ return cache[ args ]; 
+ } 
+ var a = 1; 
+ for ( var i = 0, l = arguments.length; i < l; i++ ){ 
+ a = a * arguments[i]; 
+ } 
+ return cache[ args ] = a; 
+ } 
+})();
+```
+
+
+
+执行上面的代码就会执行mult这个IIFE，而mult(1,2,3)则不会再度打印，因为此时mult被赋值为返回的那个函数了，天了噜我怎么这都要记一下。
+
+cache变量只有在mult内能被获取，也无法mult.cache获取
+
+
+
+延长变量寿命
+
+```js
+var report = (function(){ 
+ var imgs = []; 
+ return function( src ){ 
+ var img = new Image(); 
+ imgs.push( img ); 
+ img.src = src; 
+ } 
+})();
+```
+
+返回的那个函数对imgs保持着引用，因此images变量不会被销毁。
+
+
+
+对象以方法的形式包含了过程，而闭包在过程中以环境的形式包含了数据。很容易使用闭包实现一个完整的面向对象系统。
+
+```js
+var extent = function(){ 
+ var value = 0; 
+ return { 
+ call: function(){ 
+ value++; 
+ console.log( value ); 
+ } 
+}; 
+
+var extent = extent(); 
+extent.call(); // 输出：1 
+extent.call(); // 输出：2 
+extent.call(); // 输出：3
+    
+// oop
+var extent = { 
+ value: 0, 
+ call: function(){ 
+ this.value++; 
+ console.log( this.value ); 
+ } 
+}; 
+extent.call(); // 输出：1 
+extent.call(); // 输出：2 
+extent.call(); // 输出：3 
+或者：
+var Extent = function(){ 
+ this.value = 0; 
+}; 
+Extent.prototype.call = function(){ 
+ this.value++; 
+ console.log( this.value ); 
+}; 
+var extent = new Extent(); 
+extent.call(); 
+extent.call(); 
+extent.call();
+```
+
+
+
+用闭包完成命令模式
+
+```js
+<button id="execute">点击我执行命令</button> 
+<button id="undo">点击我执行命令</button>
+
+var Tv = { 
+ open: function(){ 
+ console.log( '打开电视机' ); 
+ }, 
+ close: function(){ 
+ console.log( '关上电视机' ); 
+ } 
+};
+
+var OpenTvCommand = function( receiver ){ 
+ // 添加命令接收者属性
+ this.receiver = receiver; 
+}; 
+
+OpenTvCommand.prototype.execute = function(){ 
+ this.receiver.open(); // 执行命令，打开电视机
+}; 
+
+OpenTvCommand.prototype.undo = function(){ 
+ this.receiver.close(); // 撤销命令，关闭电视机
+}; 
+
+var setCommand = function( command ){ 
+    
+ document.getElementById( 'execute' ).onclick = function(){ 
+ command.execute(); // 输出：打开电视机
+ } 
+    
+ document.getElementById( 'undo' ).onclick = function(){ 
+ command.undo(); // 输出：关闭电视机
+ } 
+}; 
+
+var ins = new OpenTvCommand( Tv )
+setCommand( tv );
+
+ins.receiver = {
+    open
+    close
+}
+ins.execute -> ins.open
+
+```
+
+把请求封装为对象，分离发起者和接收者之间的关系，可以在命令被执行前就植入接收者。
+
+使用闭包的形式完成
+
+```js
+var createCommand = function( receiver ){ 
+ var execute = function(){ 
+ return receiver.open(); // 执行命令，打开电视机
+ } 
+ var undo = function(){ 
+ return receiver.close(); // 执行命令，关闭电视机
+ } 
+ return { 
+ execute: execute, 
+ undo: undo 
+ } 
+}; 
+var setCommand = function( command ){ 
+ document.getElementById( 'execute' ).onclick = function(){ 
+ command.execute(); // 输出：打开电视机
+ } 
+ document.getElementById( 'undo' ).onclick = function(){ 
+ command.undo(); // 输出：关闭电视机
+ } 
+}; 
+setCommand( createCommand( Tv ) );
+```
+
+
+
+闭包与内存管理
+
+闭包的确会把局部变量封闭在闭包形成的环境中，使其一直生存下去，但我们使用闭包的一部分原因就是我们选择把一些变量保存起来，因为以后可能还要用到哦。如果真的要回收，到时设置成null即可。
+
+
+
+闭包还容易形成循环引用，如果其中作用域里保存着一些DOM节点，就有可能造成内存泄漏。基于引用计数的垃圾回收机制中，如果两个变量之间行成了循环引用，那么两个对象都无法被回收，但这也不是闭包导致的呀。要解决这一问题同样可以设置为null，这意味着切断了变量与它之前引用值的链接。
+
+
+
+**高阶函数**
+
+就像这几天经常看到的用bind实现柯里化一样吧，预先传入一部分函数，把几乎不变的逻辑先封装起来。但其实只要是这种形式就可以叫做HOF
+
+```js
+const outer = (initArgu)=>{
+    return function(laterArgu){
+        // ...
+    }
+}
+```
+
+
+
+**AOP，面向切面编程的实现**
+
+在js中实现AOP意味着把一个函数动态传入另外一个函数中。
+
+```js
+Function.prototype.before = function( beforefn ){ 
+ var __self = this; // 保存原函数的引用
+ return function(){ // 返回包含了原函数和新函数的"代理"函数
+ beforefn.apply( this, arguments ); // 执行新函数，修正 this 
+ return __self.apply( this, arguments ); // 执行原函数
+ } 
+}; 
+Function.prototype.after = function( afterfn ){ 
+ var __self = this; 
+ return function(){ 
+ var ret = __self.apply( this, arguments ); 
+ afterfn.apply( this, arguments ); 
+ return ret; 
+ } 
+}; 
+var func = function(){ 
+ console.log( 2 ); 
+}; 
+func = func.before(function(){ 
+ console.log( 1 ); 
+}).after(function(){ 
+ console.log( 3 ); 
+}); 
+func();
+```
+
+
+
+惰性加载函数
+
+在第一次进入进入分支后内部会重写函数，下一次进入时这个函数内部不再存在条件分支语句。
+
+```js
+var addEvent = function( elem, type, handler ){ 
+ if ( window.addEventListener ){ 
+ addEvent = function( elem, type, handler ){ 
+ elem.addEventListener( type, handler, false ); 
+ } 
+ }else if ( window.attachEvent ){ 
+ addEvent = function( elem, type, handler ){ 
+ elem.attachEvent( 'on' + type, handler ); 
+ } 
+ } 
+ addEvent( elem, type, handler ); 
+ };
+
+var div = document.getElementById( 'div1' ); 
+ addEvent( div, 'click', function(){ 
+ alert (1); 
+ }); 
+ addEvent( div, 'click', function(){ 
+ alert (2); 
+ });
+```
+
