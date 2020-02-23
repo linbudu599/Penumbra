@@ -567,3 +567,10 @@ var div = document.getElementById( 'div1' );
  });
 ```
 
+
+
+
+
+## 设计模式
+
+- [单例模式](./Single-Instance.md)
