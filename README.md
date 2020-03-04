@@ -30,5 +30,6 @@
 
   > 前端工程化/产品思维/用户体验等
 
-  - [埋点：为了更好的用户体验而奋斗](FE/Track/main.md)
-  - [首屏加载优化的一些工作](FE/Optimize/main.md)
+  - [埋点：为了更好的用户体验而奋斗](FE/Track/README.md)
+  - [首屏加载优化的一些工作](FE/Optimize/README.md)
+  - [浅析灰度发布](FE/Pre-Release/README.md)
