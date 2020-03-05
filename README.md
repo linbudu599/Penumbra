@@ -7,6 +7,7 @@
 
   - [Closure In JavaScript](./JS/Closure/Closure.md)
   - [You don't know JSON.stringify()](./JS/JSON/stringify/about.md)
+  - [RegExp Pattern Collections](./JS/RegExp/)
   
 - ES-Next
 
