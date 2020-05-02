@@ -1,0 +1,36 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  my-app:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: This is FC service
+      Role: 'acs:ram::1946652474196584:role/aliyunfcgeneratedrole-cn-hangzhou-my-app'
+      LogConfig:
+        Project: aliyun-fc-cn-hangzhou-da37e509-7a09-52ff-8b9d-ac87486c8917
+        Logstore: function-log
+      InternetAccess: true
+    my-app:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: custom
+        Timeout: 120
+        MemorySize: 1024
+        InstanceConcurrency: 5
+        EnvironmentVariables:
+          LD_LIBRARY_PATH: >-
+            /code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code:/code/lib:/usr/local/lib
+          NODE_PATH: '/code/node_modules:/usr/local/lib/node_modules'
+          PATH: >-
+            /code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
+          PYTHONUSERBASE: /code/.fun/python
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: anonymous
+            Methods:
+              - GET
+              - POST
+              - PUT
