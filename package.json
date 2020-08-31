@@ -31,6 +31,6 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
-    "recast": "^0.18.5"
+    "recast": "^0.20.3"
   }
 }
